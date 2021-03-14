@@ -3,14 +3,17 @@ from flask import Response, request, jsonify
 from models.pasteModel import Paste, DeleteExpired
 import string, random
 from urllib.parse import urlparse
-import os
+import os, json
 from middleware.errors import invalid_request
 
 
 
 class PasteAPI(Resource):
+
     def __init__(self):
+
         self.database = Paste
+        
         self.host = request.host_url
 
 
@@ -43,6 +46,7 @@ class PasteAPI(Resource):
             return response
         
         except Exception as error:
+
             print(error)
 
             if error.__class__.__name__ == 'ValidationError':
@@ -56,14 +60,19 @@ class PasteAPI(Resource):
 
 
     def generate_encode(self):
+
         text = [''.join([random.choice(string.ascii_uppercase + string.ascii_lowercase + string.digits) for n in range(6)])]
+
         random.shuffle(text)
+
         short_code = ''.join(text)
+
         return short_code
 
 
 
     def get_paste_code(self):
+
         code_db = Paste
 
         paste_code = ''
@@ -88,6 +97,7 @@ class PasteAPI(Resource):
         return paste_code
 
 
+
 class PasteOtherAPI(Resource):
 
     def __init__(self):
@@ -95,9 +105,11 @@ class PasteOtherAPI(Resource):
         self.host = request.host_url
 
     def get(self, shortCode: str) -> Response:
-        
-        try:
-            db = self.database
 
-            if shortCode:
-                data = db.obje
+        db = self.database
+        
+        if shortCode:
+            data = db.objects.get(paste_code=shortCode)
+            result = {'data': data['password']}
+            return (result)
+            
