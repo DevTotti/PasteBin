@@ -1,6 +1,6 @@
 from flask_restful import Resource
 from flask import Response, request, jsonify
-from models.pasteModel import Paste, ShortCode, DeleteExpired
+from models.pasteModel import Paste, DeleteExpired
 import string, random
 from urllib.parse import urlparse
 import os
@@ -64,7 +64,7 @@ class PasteAPI(Resource):
 
 
     def get_paste_code(self):
-        code_db = ShortCode
+        code_db = Paste
 
         paste_code = ''
 
@@ -75,7 +75,7 @@ class PasteAPI(Resource):
             short_code = self.generate_encode()
 
             try:
-                response = code_db.objects.get(code=short_code)
+                response = code_db.objects.get(paste_code=short_code)
                 
                 exist = True
 
@@ -83,10 +83,6 @@ class PasteAPI(Resource):
 
                 paste_code = short_code
 
-                data = {"code": paste_code}
-
-                code_db(**data).save()
-                
                 exist = False
 
         return paste_code
