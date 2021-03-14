@@ -109,7 +109,40 @@ class PasteOtherAPI(Resource):
         db = self.database
         
         if shortCode:
-            data = db.objects.get(paste_code=shortCode)
-            result = {'data': data['password']}
-            return (result)
+            try:
+                data = db.objects.get(paste_code=shortCode)
+                pass_wrd = data['password']
+                
+                if pass_wrd != '':
+                    try:
+
+                        password = request.get_json()['password']
+
+                        if pass_wrd == password:
+                            content = {"text": data['text']}
+                            response = jsonify(content)
+
+                            return response
+
+                        else:
+                            return invalid_request
+
+
+                    except:
+                        return invalid_request
+
+                else:
+                    content = {"text": data['text']}
+                    response = jsonify(content)
+
+                    return response
+
+            except:
+                return invalid_request
+
+        else:
+
+            return invalid_request
+
+
             
