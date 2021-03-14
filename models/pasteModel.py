@@ -11,9 +11,9 @@ class Paste(Document):
     created = DateTimeField(default=datetime.datetime.now())
 
 
-class ShortCode(Document):
-    code = StringField(required=True, max_length=7)
-    created = DateTimeField(default=datetime.datetime.now)
+# class ShortCode(Document):
+#     code = StringField(required=True, max_length=7)
+#     created = DateTimeField(default=datetime.datetime.now)
 
 
 class DeleteExpired(Document):

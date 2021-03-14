@@ -6,6 +6,8 @@ from urllib.parse import urlparse
 import os
 from middleware.errors import invalid_request
 
+
+
 class PasteAPI(Resource):
     def __init__(self):
         self.database = Paste
@@ -80,6 +82,26 @@ class PasteAPI(Resource):
             except:
 
                 paste_code = short_code
+
+                data = {"code": paste_code}
+
+                code_db(**data).save()
+                
                 exist = False
 
         return paste_code
+
+
+class PasteOtherAPI(Resource):
+
+    def __init__(self):
+        self.database = Paste
+        self.host = request.host_url
+
+    def get(self, shortCode: str) -> Response:
+        
+        try:
+            db = self.database
+
+            if shortCode:
+                data = db.obje
